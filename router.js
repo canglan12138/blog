@@ -46,10 +46,10 @@ router.post('/register',(req,res) => {
       })
     }
     if (data) {
-      //邮箱或者昵称已存在
+      //邮箱已存在
       return res.status(200).json({
         err_code: 1,
-        message: 'Email or nickname already'
+        message: 'Email already'
       })
     }
     //对密码进行 md5 重复加密
