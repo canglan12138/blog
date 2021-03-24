@@ -6,7 +6,9 @@ var md5 = require('blueimp-md5')
 var router = express.Router()
 
 router.get('/',(req,res) => {
-  res.render('index.html')
+  res.render('index.html',{
+    user: req.session.user
+  })
 })
 
 router.get('/login',(req,res) => {
@@ -62,11 +64,15 @@ router.post('/register',(req,res) => {
           message: 'Internal error'
         })
       }
+
+      //注册成功 通过 session 记录用户状态
+      req.session.user = user
+
       //Express 提供了一个响应方法：json
       //该方法接收一个对象作为参数，它会自动把对象转为字符串再发送给浏览器
       res.status(200).json({
         err_code: 0,
-        message: 'ok'
+        message: 'OK'
       })
     })
   })
