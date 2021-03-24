@@ -15,7 +15,7 @@ router.get('/login',(req,res) => {
   res.render('login.html')
 })
 
-router.post('/login',(req,res) => {
+router.post('/login',(req,res,next) => {
   body = req.body
 
   User.findOne({
@@ -24,10 +24,7 @@ router.post('/login',(req,res) => {
   },(err,user) => {
 
     if (err) {
-      return res.status(500).json({
-        err_code: 500,
-        message: err.message
-      })
+      return next(err)
     }
 
     if (!user) {
@@ -51,7 +48,7 @@ router.get('/register',(req,res) => {
   res.render('register.html')
 })
 
-router.post('/register',(req,res) => {
+router.post('/register',(req,res,next) => {
   /*
   * 1.获取表单提交的数据
   * 2.操作数据库
@@ -70,10 +67,7 @@ router.post('/register',(req,res) => {
     ]
   },(err,data) => {
     if (err) {
-      return res.status(500).json({
-        success: false,
-        message: '服务端错误'
-      })
+      return next(err)
     }
     if (data) {
       //邮箱已存在
