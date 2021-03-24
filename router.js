@@ -16,7 +16,35 @@ router.get('/login',(req,res) => {
 })
 
 router.post('/login',(req,res) => {
+  body = req.body
 
+  User.findOne({
+    email:body.email,
+    password: md5(md5(body.password))
+  },(err,user) => {
+
+    if (err) {
+      return res.status(500).json({
+        err_code: 500,
+        message: err.message
+      })
+    }
+
+    if (!user) {
+      return res.status(200).json({
+        err_code: 1,
+        message: 'Email or password is invaild.'
+      })
+    }
+
+    //用户存在 登陆成功 记录登陆状态
+    req.session.user = user
+
+    res.status(200).json({
+      err_code: 0,
+      message: 'OK'
+    })
+  })
 })
 
 router.get('/register',(req,res) => {
